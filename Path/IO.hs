@@ -14,7 +14,6 @@
 
 {-# LANGUAGE CPP               #-}
 {-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE TemplateHaskell   #-}
 {-# LANGUAGE TupleSections     #-}
 {-# LANGUAGE TypeFamilies      #-}
 
@@ -570,7 +569,8 @@ walkDirRel handler topdir' = do
         return $ if S.member ufid traversed
           then Nothing
           else Just (S.insert ufid traversed)
-  void (walkAvoidLoop S.empty $(mkRelDir "."))
+  rd <- liftIO $ parseRelDir "."
+  void (walkAvoidLoop S.empty rd)
 
 -- | Similar to 'walkDir' but accepts a 'Monoid'-returning output writer as
 -- well. Values returned by the output writer invocations are accumulated
